@@ -1,8 +1,17 @@
-# music_player
+This is a Music Player app developed in flutter.
 
-A new Flutter application.
+Key Features :
 
-## Getting Started
+* Play, pause, seek options.
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+* Search across playlist, albums and songs.
+
+* Various theme options.
+
+* Create and delete playlist.
+
+* Controls in Notification bar.
+
+* Support for five languages( Spanish, German, French, Russian and English).
+
+* Beautiful and responsive UI.
