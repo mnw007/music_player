@@ -30,9 +30,6 @@ class MyPlayer{
 
   void initAudioPlayer() {
     audioPlayer = new AudioPlayer();
-   /* positionSubscription = audioPlayer.onAudioPositionChanged.listen(
-            (p) => position = p
-    );*/
     audioPlayerStateSubscription =
         audioPlayer.onPlayerStateChanged.listen((s) {
           if (s == AudioPlayerState.STOPPED) {
@@ -50,7 +47,6 @@ class MyPlayer{
   Future playMusic(Song song) async {
     if((isPlaying||isPaused) &&currentSong!=song)
      {
-       print('vvvvvvvvvvvvv');
        await audioPlayer.stop();}
     currentSong= song;
     await audioPlayer.play(currentSong.data);
@@ -139,8 +135,6 @@ class MyPlayer{
         albumState.setState(()=>AlbumSongs.indexSelected);
       }
     }
-
-  //  playMusic(currentSong);
     if(state.mounted)
       state.setState(()=>state.song(currentSong));
   }
@@ -182,7 +176,6 @@ class MyPlayer{
       }
 
     }
-   // playMusic(currentSong);
     if(state.mounted)
       state.setState(()=>state.song(currentSong));
   }
