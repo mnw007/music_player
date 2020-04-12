@@ -80,7 +80,7 @@ class SettingsState extends State<Settings> {
               ),
               Container(
                 child: GestureDetector(child: Text('Contact Us',style: TextStyle(fontSize: 20.0,decoration: TextDecoration.underline)),
-                onTap: ()=>launchUrl('https://www.startxlabs.com/'),
+                onTap: ()=>launchUrl('https://github.com/mnw007'),
                 ),
               ),
               Container(
