@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:music_player/drawer.dart';
-import 'package:music_player/localizations.dart';
-import 'package:music_player/player.dart';
-import 'package:music_player/song.dart';
-import 'package:music_player/songs.dart';
+import 'package:music_player/widgets/drawer.dart';
+import 'package:music_player/utils/localizations.dart';
+import 'package:music_player/utils/player.dart';
+import 'package:music_player/models/song.dart';
+import 'package:music_player/widgets/songs.dart';
 
 class SearchResult extends StatelessWidget {
 

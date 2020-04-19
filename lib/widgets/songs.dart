@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:music_player/home.dart';
-import 'package:music_player/play.dart';
-import 'package:music_player/player.dart';
-import 'package:music_player/playlist.dart';
+import 'package:music_player/screens/home.dart';
+import 'package:music_player/screens/play.dart';
+import 'package:music_player/utils/player.dart';
+import 'package:music_player/screens/playlist.dart';
 import 'dart:convert';
-import 'song.dart';
+import '../models/song.dart';
 
 _SongsState stateSong; //added
 

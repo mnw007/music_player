@@ -14,6 +14,7 @@ dependencies:
   dynamic_theme:
       git:
         url: git://github.com/Norbert515/dynamic_theme.git
+  palette_generator: ^0.2.2
 
 flutter_icons:
   android: true
@@ -29,3 +30,8 @@ flutter:
   uses-material-design: true
   assets:
     - img/placeholder.png
+
+  fonts:
+    - family: BalooBhaina
+      fonts:
+        - asset: fonts/BalooBhaina2-Regular.ttf

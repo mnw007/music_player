@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:music_player/drawer.dart';
-import 'package:music_player/localizations.dart';
-import 'package:music_player/albums.dart';
+import 'package:music_player/widgets/drawer.dart';
+import 'package:music_player/utils/localizations.dart';
+import 'package:music_player/screens/albums.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 int themeValue;

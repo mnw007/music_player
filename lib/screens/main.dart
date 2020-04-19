@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/home.dart';
+import 'package:music_player/screens/home.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
-import 'package:music_player/localizations.dart';
+import 'package:music_player/utils/localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() => runApp(MusicApp());

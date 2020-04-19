@@ -2,13 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:music_player/albumSongs.dart';
-import 'package:music_player/drawer.dart';
-import 'package:music_player/home.dart';
-import 'package:music_player/localizations.dart';
-import 'package:music_player/song.dart';
-import 'package:music_player/songs.dart';
-import 'package:music_player/player.dart';
+import 'package:music_player/screens/albumSongs.dart';
+import 'package:music_player/widgets/drawer.dart';
+import 'package:music_player/screens/home.dart';
+import 'package:music_player/utils/localizations.dart';
+import 'package:music_player/models/song.dart';
+import 'package:music_player/widgets/songs.dart';
+import 'package:music_player/utils/player.dart';
 
 typedef void OnError(Exception exception);
 enum PlayerState { stopped, playing, paused }

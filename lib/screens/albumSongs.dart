@@ -1,15 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:music_player/albums.dart';
-import 'package:music_player/drawer.dart';
-import 'package:music_player/home.dart';
-import 'package:music_player/localizations.dart';
-import 'package:music_player/play.dart';
-import 'package:music_player/player.dart';
-import 'package:music_player/playlist.dart';
-import 'package:music_player/song.dart';
-import 'package:music_player/songs.dart';
+import 'package:music_player/widgets/drawer.dart';
+import 'package:music_player/screens/home.dart';
+import 'package:music_player/utils/localizations.dart';
+import 'package:music_player/screens/play.dart';
+import 'package:music_player/utils/player.dart';
+import 'package:music_player/screens/playlist.dart';
+import 'package:music_player/models/song.dart';
+import 'package:music_player/widgets/songs.dart';
+
+import '../models/album.dart';
 
 _AlbumSongsState albumState;
 List<Song> playingList;

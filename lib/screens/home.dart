@@ -3,16 +3,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:local_notifications/local_notifications.dart';
-import 'package:music_player/albums.dart';
-import 'package:music_player/drawer.dart';
-import 'package:music_player/localizations.dart';
-import 'package:music_player/player.dart';
-import 'package:music_player/play.dart';
-import 'package:music_player/playlist.dart';
-import 'package:music_player/search.dart';
-import 'package:music_player/song.dart';
-import 'package:music_player/songs.dart';
+import 'package:music_player/screens/albums.dart';
+import 'package:music_player/widgets/drawer.dart';
+import 'package:music_player/utils/localizations.dart';
+import 'package:music_player/utils/player.dart';
+import 'package:music_player/screens/play.dart';
+import 'package:music_player/screens/playlist.dart';
+import 'package:music_player/screens/search.dart';
+import 'package:music_player/models/song.dart';
+import 'package:music_player/widgets/songs.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../models/album.dart';
 
 bool isSearch = false;
 TextEditingController controller = TextEditingController();

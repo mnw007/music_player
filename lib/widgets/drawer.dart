@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:music_player/home.dart';
-import 'package:music_player/localizations.dart';
-import 'package:music_player/playlist.dart';
-import 'package:music_player/settings.dart';
+import 'package:music_player/utils/localizations.dart';
+import 'package:music_player/screens/playlist.dart';
+import 'package:music_player/screens/settings.dart';
 
 class NavDrawer extends StatelessWidget {
   final bool shouldReplace;
