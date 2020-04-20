@@ -5,7 +5,6 @@ import 'package:flutter/painting.dart';
 import 'package:music_player/screens/albumSongs.dart';
 import 'package:music_player/screens/home.dart';
 import 'package:music_player/models/song.dart';
-import 'package:palette_generator/palette_generator.dart';
 
 import '../models/album.dart';
 
@@ -98,46 +97,11 @@ class _AlbumsState extends State<Albums> {
   }
 }
 
-class AlbumImage extends StatefulWidget {
+class AlbumImage extends StatelessWidget {
   final String image;
   final String name;
 
   AlbumImage({Key key, this.image, this.name}) : super(key: key);
-
-  @override
-  _AlbumImageState createState() => _AlbumImageState();
-}
-
-class _AlbumImageState extends State<AlbumImage> {
-  Color iconColor = Colors.black;
-
-  void _updatePaletteGenerator(ImageProvider imageProvider) async {
-    var paletteGenerator = await PaletteGenerator.fromImageProvider(
-      imageProvider,
-    );
-    setState(() {
-      iconColor = paletteGenerator?.lightVibrantColor?.color;
-    });
-  }
-
-  ImageProvider imageProvider;
-
-  @override
-  void initState() {
-    super.initState();
-    imageProvider = widget.image != null
-        ? FileImage(File(widget.image))
-        : AssetImage('img/placeholder.png');
-
-    _updatePaletteGenerator(imageProvider);
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    iconColor=null;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +124,9 @@ class _AlbumImageState extends State<AlbumImage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image(
-                  image: imageProvider,
+                  image: image != null
+    ? FileImage(File(image))
+        : AssetImage('img/placeholder.png'),
                   fit: BoxFit.fill,
                   width: double.infinity,
                   height: double.infinity,
@@ -174,7 +140,6 @@ class _AlbumImageState extends State<AlbumImage> {
                 child: Icon(
                   Icons.play_circle_outline,
                   size: 35,
-                  color: iconColor,
                 ),
               ),
             )
@@ -184,7 +149,7 @@ class _AlbumImageState extends State<AlbumImage> {
           height: 10,
         ),
         Text(
-          '${widget.name}',
+          '${name}',
           style: TextStyle(
               fontSize: 19.0,
               fontWeight: FontWeight.w800,
