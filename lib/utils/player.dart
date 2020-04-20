@@ -188,12 +188,12 @@ class MyPlayer{
       if(isPlaying)
         {
           pause();
-          playIcon=Icons.play_arrow;
+          playIcon=Icons.play_circle_filled;
         }
       else if(isPaused)
         {
           playMusic(currentSong);
-          playIcon=Icons.pause;
+          playIcon=Icons.pause_circle_filled;
         }
     }
     if(tabState!=null && tabState.mounted)

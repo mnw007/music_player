@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:local_notifications/local_notifications.dart';
 import 'package:music_player/screens/albums.dart';
+import 'package:music_player/utils/constants.dart';
 import 'package:music_player/widgets/drawer.dart';
 import 'package:music_player/utils/localizations.dart';
 import 'package:music_player/utils/player.dart';
@@ -22,7 +23,7 @@ final GlobalKey<ScaffoldState> scaffoldState = GlobalKey();
 bool anySelected = false;
 _TabViewState tabState;
 MyPlayer player;
-IconData playIcon = Icons.pause;
+IconData playIcon = Icons.pause_circle_filled;
 
 class TabView extends StatefulWidget {
   TabView({key}):super(key:key);
@@ -99,26 +100,42 @@ void showMessage(ScaffoldState scaffold, String message) {
 Widget songBar() {
   double width = MediaQuery.of(scaffoldState.currentContext).size.width;
   double height = MediaQuery.of(scaffoldState.currentContext).size.height;
+
   return Container(
-    width: width - width * 0.05,
-    padding:
-        const EdgeInsets.only(left: 8.0, top: 8.0, bottom: 8.0, right: 8.0),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          offset: Offset(0, 0),
+          blurRadius: 15,
+          color: Color(0xFF757575).withOpacity(.8),
+        )
+      ],
+    ),
+    padding: const EdgeInsets.all(10),
     child: Row(
-      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: CircleAvatar(
-              backgroundImage: player.currentSong.albumArt != null
+        Container(
+          padding: const EdgeInsets.only(right: 15),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Colors.white,
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: Image(
+              image: player.currentSong.albumArt != null
                   ? FileImage(File(player.currentSong.albumArt))
-                  : AssetImage('img/placeholder.png'),
-              radius: width * 0.05),
+                  : AssetImage(kPlaceholderPath),
+              fit: BoxFit.fill,
+              height: height*0.075,
+              width: width*0.15,
+            ),
+          ),
         ),
         Expanded(
-            flex: 3,
-            child: FlatButton(
-                padding: EdgeInsets.only(top: height*0.02,bottom: height*0.02),
-                onPressed: () {
+            child: GestureDetector(
+                onTap: () {
                   player.playMusic(player.currentSong);
                   Navigator.push(
                       scaffoldState.currentContext,
@@ -128,29 +145,27 @@ Widget songBar() {
                 },
                 child: Text(
                   player.currentSong.title,
-                  style: TextStyle(fontSize: 20.0, color: Colors.white),
-                  overflow: TextOverflow.clip,
-                  maxLines: 2,
+                  style: TextStyle(fontSize: 22,
+                      fontFamily: kBalooBhainaFont,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                  maxLines: 1,
                 ))),
-        IconButton(
-            icon: Icon(
+        GestureDetector(
+            child: Icon(
               Icons.skip_previous,
-              color: Colors.white,
-              size: width * 0.05,
+              color: Colors.black,
+              size: width * 0.08,
             ),
-            onPressed: () => player.prevSong()),
-        IconButton(
-            icon: Icon(playIcon, color: Colors.white, size: width * 0.05),
-            onPressed: () => player.toggle()),
-        IconButton(
-            icon:
-                Icon(Icons.skip_next, color: Colors.white, size: width * 0.05),
-            onPressed: () => player.nextSong(true)),
+            onTap: () => player.prevSong()),
+//        Icon(playIcon, color: Colors.black, size: width * 0.16),
+        GestureDetector(
+            child: Icon(playIcon, color: Colors.black, size: width * 0.16),
+            onTap: () => player.toggle()),
+        GestureDetector(
+            child: Icon(Icons.skip_next, color: Colors.black, size: width * 0.08),
+            onTap: () => player.nextSong(true)),
       ],
-    ),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(width * 0.1)),
-      color: Colors.brown[900],
     ),
   );
 }
@@ -205,14 +220,20 @@ class _TabViewState extends State<TabView> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        floatingActionButton: player != null ? songBar() : null,
         key: scaffoldState,
         drawer: NavDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
+          centerTitle: true,
           title: !isSearch
-              ? Text(MyLocalizations.of(context).music, style: TextStyle(color: Colors.black),)
+              ? Text(MyLocalizations.of(context).music,
+                style: TextStyle(color: Colors.black,
+                      fontFamily: kBalooBhainaFont,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold
+                    ),
+                )
               : Container(
                   child: TextField(
                       controller: controller,
@@ -247,7 +268,7 @@ class _TabViewState extends State<TabView> {
           bottom: TabBar(
             unselectedLabelColor: Colors.grey,
             labelColor: Colors.pinkAccent,
-            labelStyle: TextStyle(fontSize: 25, fontFamily: 'BalooBhaina'),
+            labelStyle: TextStyle(fontSize: 25, fontFamily: kBalooBhainaFont),
             indicatorColor: Colors.white,
             tabs: <Widget>[
             new Tab(text: MyLocalizations.of(context).songs),
@@ -255,10 +276,18 @@ class _TabViewState extends State<TabView> {
                ],
           ),
         ),
-        body: TabBarView(children: <Widget>[
-          widget.song,
-          widget.album,
-        ]),
+        body: Stack(
+          children: <Widget>[
+            TabBarView(children: <Widget>[
+              widget.song,
+              widget.album,
+          ]),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: player!=null?songBar():null
+            )
+        ],
+        ),
       ),
     );
   }

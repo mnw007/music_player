@@ -98,12 +98,12 @@ class _PlayState extends State<Play> {
     if(player.isPlaying)
      {
        play=Icons.play_circle_filled;
-       playIcon=Icons.play_arrow;
+       playIcon=Icons.play_circle_filled;
        player.pause();
      }
     else if(player.isPaused)
      { play=Icons.pause_circle_filled;
-        playIcon=Icons.pause;
+        playIcon=Icons.pause_circle_filled;
        player.playMusic(widget.currentSong);
      }
 
