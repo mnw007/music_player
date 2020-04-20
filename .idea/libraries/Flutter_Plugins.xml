@@ -1,13 +1,15 @@
 <component name="libraryTable">
   <library name="Flutter Plugins" type="FlutterPluginsLibraryType">
     <CLASSES>
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/url_launcher-3.0.3" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/local_notifications-0.0.7" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/shared_preferences-0.5.6+3" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-0.1.2+4" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/audioplayer-0.8.1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.5" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-0.0.4" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/url_launcher_macos-0.0.1+4" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.4.2" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/url_launcher_web-0.1.1+1" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dartlang.org/audioplayer-0.8.1" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

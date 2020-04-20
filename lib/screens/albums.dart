@@ -62,6 +62,7 @@ class _AlbumsState extends State<Albums> {
     }
     if (isChanged) createAlbums();
     return Container(
+      color: Colors.white,
       child: widget.songList == null
           ? Image(
               image: AssetImage('img/placeholder.png'),
@@ -115,7 +116,7 @@ class _AlbumImageState extends State<AlbumImage> {
       imageProvider,
     );
     setState(() {
-      iconColor = paletteGenerator.lightVibrantColor.color;
+      iconColor = paletteGenerator?.lightVibrantColor?.color;
     });
   }
 
@@ -132,6 +133,13 @@ class _AlbumImageState extends State<AlbumImage> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    iconColor=null;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
@@ -145,7 +153,7 @@ class _AlbumImageState extends State<AlbumImage> {
                   BoxShadow(
                     offset: Offset(0, 10),
                     blurRadius: 20,
-                    color: Color(0xFF4056C6).withOpacity(.15),
+                    color: Color(0xFF757575).withOpacity(.10),
                   )
                 ],
               ),

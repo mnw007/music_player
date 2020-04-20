@@ -47,7 +47,8 @@ class MyPlayer{
   Future playMusic(Song song) async {
     if((isPlaying||isPaused) &&currentSong!=song)
      {
-       await audioPlayer.stop();}
+       await audioPlayer.stop();
+     }
     currentSong= song;
     await audioPlayer.play(currentSong.data);
     playerState = PlayerState.playing;

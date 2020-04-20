@@ -209,16 +209,16 @@ class _TabViewState extends State<TabView> {
         key: scaffoldState,
         drawer: NavDrawer(),
         appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
           title: !isSearch
-              ? Text(MyLocalizations.of(context).music)
+              ? Text(MyLocalizations.of(context).music, style: TextStyle(color: Colors.black),)
               : Container(
                   child: TextField(
                       controller: controller,
                       autofocus: true,
                       decoration: InputDecoration(
-                        hintText: '     ${MyLocalizations
-                .of(context)
-                .search}',
+                        hintText: '     ${MyLocalizations.of(context).search}',
                         fillColor: Theme.of(context).scaffoldBackgroundColor,
                       ),
                       onSubmitted: (_) => search(context)),
@@ -234,6 +234,7 @@ class _TabViewState extends State<TabView> {
                       isSearch = !isSearch;
                       controller.text = '';
                     }),
+                color: Colors.black,
               ),
             ),
             anySelected
@@ -243,10 +244,16 @@ class _TabViewState extends State<TabView> {
                 ? IconButton(icon: Icon(Icons.add_circle), onPressed: add)
                 : Container(),
           ],
-          bottom: TabBar(tabs: <Widget>[
+          bottom: TabBar(
+            unselectedLabelColor: Colors.grey,
+            labelColor: Colors.pinkAccent,
+            labelStyle: TextStyle(fontSize: 25, fontFamily: 'BalooBhaina'),
+            indicatorColor: Colors.white,
+            tabs: <Widget>[
             new Tab(text: MyLocalizations.of(context).songs),
             new Tab(text: MyLocalizations.of(context).albums)
-          ]),
+               ],
+          ),
         ),
         body: TabBarView(children: <Widget>[
           widget.song,

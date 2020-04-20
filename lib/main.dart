@@ -16,6 +16,9 @@ class MusicApp extends StatelessWidget{
         data: (brightness) => new ThemeData(
           primarySwatch: Colors.brown,
           brightness: brightness,
+          primaryIconTheme: const IconThemeData.fallback().copyWith(
+            color: Colors.black,
+          ),
     ),
     themedWidgetBuilder: (context, theme) {
       return MaterialApp(onGenerateTitle: (BuildContext context) =>
