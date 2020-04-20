@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:music_player/screens/albumSongs.dart';
+import 'package:music_player/utils/constants.dart';
 import 'package:music_player/widgets/drawer.dart';
 import 'package:music_player/screens/home.dart';
 import 'package:music_player/utils/localizations.dart';
@@ -144,7 +145,7 @@ class _PlayState extends State<Play> {
                   child: CircleAvatar(
                     backgroundImage:widget.currentSong.albumArt != null
                         ? FileImage(File(widget.currentSong.albumArt))
-                        : AssetImage('img/placeholder.png'),radius: height*0.2
+                        : AssetImage(kPlaceholderPath),radius: height*0.2
                   ),
                 ),
                 Padding(

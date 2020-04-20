@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:music_player/utils/constants.dart';
 import 'package:music_player/widgets/drawer.dart';
 import 'package:music_player/utils/localizations.dart';
 import 'package:music_player/utils/player.dart';
@@ -31,7 +32,7 @@ class SearchResult extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(MyLocalizations.of(context).noSong,style: TextStyle(fontSize: 25.0,letterSpacing: 1.0,wordSpacing: 3.0),textAlign: TextAlign.center,),
-              Image(image: AssetImage('img/placeholder.png'),width: size.width*0.7,height: size.height*0.3,)
+              Image(image: AssetImage(kPlaceholderPath),width: size.width*0.7,height: size.height*0.3,)
             ],
           ),
         ):
@@ -44,7 +45,7 @@ class SearchResult extends StatelessWidget {
                   child: ListTile(
                     leading: CircleAvatar(
                       backgroundImage: songs[index].albumArt!=null ? FileImage(File(songs[index].albumArt)):
-                      AssetImage('img/placeholder.png'),
+                      AssetImage(kPlaceholderPath),
                     ),
                     title: Text('${songs[index].title}',),
                     trailing: Text('${songs[index].duration}',),

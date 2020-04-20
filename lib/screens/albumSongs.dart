@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:music_player/utils/constants.dart';
 import 'package:music_player/widgets/drawer.dart';
 import 'package:music_player/screens/home.dart';
 import 'package:music_player/utils/localizations.dart';
@@ -89,8 +90,8 @@ class _AlbumSongsState extends State<AlbumSongs> {
                   children: <Widget>[
                     CircleAvatar(
                         backgroundImage:widget.songs.album.isNotEmpty
-                          ?  (widget.songs.album[0].albumArt)== null?AssetImage('img/placeholder.png'): FileImage(File(widget.songs.album[0].albumArt))
-                          : AssetImage('img/placeholder.png'),radius: MediaQuery.of(context).size.height*0.15,
+                          ?  (widget.songs.album[0].albumArt)== null?AssetImage(kPlaceholderPath): FileImage(File(widget.songs.album[0].albumArt))
+                          : AssetImage(kPlaceholderPath),radius: MediaQuery.of(context).size.height*0.15,
                     ),
                     Padding(
                       padding: EdgeInsets.only( top: MediaQuery.of(context).size.height*0.03,left: 10.0,right: 10.0),
@@ -112,7 +113,7 @@ class _AlbumSongsState extends State<AlbumSongs> {
                           leading: CircleAvatar(
                             backgroundImage: widget.songs.album[index].albumArt != null
                                 ? FileImage(File(widget.songs.album[index].albumArt))
-                                : AssetImage('img/placeholder.png'),
+                                : AssetImage(kPlaceholderPath),
                           ),
                           title: Text('${widget.songs.album[index].title}',overflow: TextOverflow.clip,maxLines: 2,style: TextStyle(color: AlbumSongs.indexSelected==index || widget.songs.album[index].isSelected ? (Theme.of(context).brightness==Brightness.dark? Colors.black:Colors.white) : (Theme.of(context).brightness==Brightness.dark? Colors.white:Colors.black))),
                           subtitle: Text('${widget.songs.album[index].artist}',style: TextStyle(color: AlbumSongs.indexSelected==index || widget.songs.album[index].isSelected? (Theme.of(context).brightness==Brightness.dark? Colors.black:Colors.white70) : (Theme.of(context).brightness==Brightness.dark? Colors.white70:Colors.black))),

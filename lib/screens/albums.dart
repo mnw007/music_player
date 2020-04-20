@@ -5,6 +5,7 @@ import 'package:flutter/painting.dart';
 import 'package:music_player/screens/albumSongs.dart';
 import 'package:music_player/screens/home.dart';
 import 'package:music_player/models/song.dart';
+import 'package:music_player/utils/constants.dart';
 
 import '../models/album.dart';
 
@@ -61,10 +62,10 @@ class _AlbumsState extends State<Albums> {
     }
     if (isChanged) createAlbums();
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: widget.songList == null
           ? Image(
-              image: AssetImage('img/placeholder.png'),
+              image: AssetImage(kPlaceholderPath),
             )
           : GridView.builder(
               itemCount: widget.albums.length,
@@ -125,8 +126,8 @@ class AlbumImage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 child: Image(
                   image: image != null
-    ? FileImage(File(image))
-        : AssetImage('img/placeholder.png'),
+                      ? FileImage(File(image))
+                      : AssetImage(kPlaceholderPath),
                   fit: BoxFit.fill,
                   width: double.infinity,
                   height: double.infinity,

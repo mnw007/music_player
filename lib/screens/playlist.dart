@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:music_player/screens/albumSongs.dart';
+import 'package:music_player/utils/constants.dart';
 import 'package:music_player/utils/localizations.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:music_player/widgets/drawer.dart';
@@ -85,7 +86,7 @@ void createPlaylist(ScaffoldState scaffold,{List<Song> songs}){
                   {
                     if(songs==null)//blank playlist
                       {
-                        playlist.add(Album(controller.text,'img/placeholder.png' ));
+                        playlist.add(Album(controller.text,kPlaceholderPath ));
                         editFile();
                         Navigator.pop(scaffold.context);
                       }
@@ -227,7 +228,7 @@ class _PlaylistState extends State<Playlist> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(MyLocalizations.of(context).noPlaylist,style: TextStyle(fontSize: 25.0,letterSpacing: 1.0,wordSpacing: 3.0),textAlign: TextAlign.center,),
-                 Image(image: AssetImage('img/placeholder.png'),width: size.width*0.7,height: size.height*0.3,)
+                 Image(image: AssetImage(kPlaceholderPath),width: size.width*0.7,height: size.height*0.3,)
               ],
             ),
           ):
@@ -241,8 +242,8 @@ class _PlaylistState extends State<Playlist> {
                         color: selectedIndex==index?Colors.brown[400]: Theme.of(context).scaffoldBackgroundColor,
                         child: ListTile(
                           leading: CircleAvatar(backgroundImage: playlist[index].album.isNotEmpty
-                              ? (playlist[index].album[0].albumArt)== null?AssetImage('img/placeholder.png'): FileImage(File(playlist[index].album[0].albumArt))
-                              : AssetImage('img/placeholder.png'),radius: 50.0,),
+                              ? (playlist[index].album[0].albumArt)== null?AssetImage(kPlaceholderPath): FileImage(File(playlist[index].album[0].albumArt))
+                              : AssetImage(kPlaceholderPath),radius: 50.0,),
                           title: Container(padding:EdgeInsets.only(left: size.width*0.015),child: Text('${playlist[index].name}',style: TextStyle(fontSize: 23.0,fontWeight: FontWeight.w400,color:selectedIndex==index ? (Theme.of(context).brightness==Brightness.dark? Colors.black:Colors.white) : (Theme.of(context).brightness==Brightness.dark? Colors.white:Colors.black)),)),
                           contentPadding: const EdgeInsets.only(top: 15.0,left: 8.0,bottom: 15.0),
                           onTap:(){
