@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:music_player/screens/albumSongs.dart';
@@ -122,72 +123,123 @@ class _PlayState extends State<Play> {
 
   @override
   Widget build(BuildContext context) {
-    double height= MediaQuery.of(context).size.height ;
-   positionSubscription = player.audioPlayer.onAudioPositionChanged.listen( (p) {if(mounted)setState(()=>position = p);});//added mounted check
+
+    Size size = MediaQuery.of(context).size;
+    double height= size.height ;
+    positionSubscription = player.audioPlayer.onAudioPositionChanged.listen( (p) {if(mounted)setState(()=>position = p);});//added mounted check
+
     return Scaffold(
-      drawer: NavDrawer(shouldReplace: true),
-      appBar: AppBar(
-        title: !isSearch ? Text('Music'): Container(child: TextField(controller: controller,autofocus:true,decoration: InputDecoration(hintText: '     ${MyLocalizations.of(context).search}',fillColor:Theme.of(context).scaffoldBackgroundColor, ),onSubmitted: (_)=>search(context)),decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0)),) ,
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(icon: isSearch?Icon(Icons.close):Icon(Icons.search),onPressed:()=> setState((){isSearch=!isSearch;controller.text='';}),),
-          )
-        ],
-      ),
       body: SingleChildScrollView(
-        child: Center(
-          child:Column(children: <Widget>[
-            Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: height*0.05),
-                  child: CircleAvatar(
-                    backgroundImage:widget.currentSong.albumArt != null
-                        ? FileImage(File(widget.currentSong.albumArt))
-                        : AssetImage(kPlaceholderPath),radius: height*0.2
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 10.0,right: 10.0,top: height*0.04),
-                  child: Text('${widget.currentSong.title}',
-                    style: TextStyle(fontSize: 22.0,letterSpacing: 1.5,),textAlign: TextAlign.center,overflow: TextOverflow.fade,maxLines: 2,
-                  ),
-                ),
-                Text('${widget.currentSong.artist}',textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0),),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: height*0.05),
-              child: Column(
-                children: <Widget>[
-                  Row(children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(getTime()),
-                    ),
-                    Expanded(flex:9,child: Slider(
-                      value: (position.inSeconds).toDouble() ?? 0.0,
-                      onChanged: (double value){
-                        setState((){player.seek(value.roundToDouble());
-                        position;});},
-                      min:0.0,max: widget.currentSong.time.floorToDouble(),)),
-                    Padding(
-                      padding: const EdgeInsets.only(right:  8.0),
-                      child: Text('${widget.currentSong.duration}'),
-                    ),
-                  ],),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(padding:const EdgeInsets.only(top: 10.0),child: IconButton(icon: Icon(Icons.skip_previous,size: 50.0,color: Colors.brown), onPressed: (){prevSong();}),height: 80.0,),
-                      Container(child: IconButton(icon: Icon(play,size: 70.0,color: Colors.brown,), onPressed: (){toggle();}),height: 80.0),
-                      Container(padding:const EdgeInsets.only(top: 10.0,left: 10.0),child: IconButton(icon: Icon(Icons.skip_next,size: 50.0,color: Colors.brown,), onPressed: (){nextSong(true);}),height: 80.0),
-                    ],
+        child: Column(children: <Widget>[
+          Stack(
+            children: <Widget>[
+              Container(
+                height: height*0.35,
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: widget.currentSong.albumArt != null
+                      ? FileImage(File(widget.currentSong.albumArt))
+                      : AssetImage(kPlaceholderPath),
+                    fit: BoxFit.fill,
                   )
+                ),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                  child: new Container(
+                    decoration: new BoxDecoration(color: Colors.white.withOpacity(0.4)),
+                  ),
+                ),
+              ),
+              Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top:20.0, left: 20, right: 20),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.arrow_back, size: 30,),
+                        Expanded(
+                          child: Text('Now Playing',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontFamily: kBalooBhainaFont, fontSize: 30, fontWeight: FontWeight.w700,),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: height*0.05),
+                    child: Container(
+                      height: height*0.35,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image(
+                          image: widget.currentSong.albumArt != null
+                              ? FileImage(File(widget.currentSong.albumArt))
+                              : AssetImage(kPlaceholderPath),
+                          fit: BoxFit.fill,
+                          width: size.width*0.7,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 10.0,right: 10.0,top: height*0.05, bottom: 5),
+            child: Text('${widget.currentSong.title}',
+              style: TextStyle(
+                fontFamily: kBalooBhainaFont,height: 1,
+                fontSize: 28.0,letterSpacing: 1.5,),
+              textAlign: TextAlign.center,overflow: TextOverflow.fade,maxLines: 2,
             ),
-          ])
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Text('${widget.currentSong.artist}',textAlign: TextAlign.center,style: TextStyle(
+                fontFamily: kBalooBhainaFont,
+                color: Colors.grey,
+                fontSize: 20.0,height: 1),
+            ),
+          ),
+          SizedBox(height: height*0.05,),
+          Slider(
+            value: (position.inSeconds).toDouble() ?? 0.0,
+            onChanged: (double value){
+              setState((){
+                player.seek(value.roundToDouble());
+                position;
+                });
+              },
+            min:0.0,max: widget?.currentSong?.time?.floorToDouble(),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              children: <Widget>[
+                Text(getTime(), textAlign: TextAlign.start,
+                  style: TextStyle(color: Colors.grey, fontFamily: kBalooBhainaFont, fontSize: 18, height: 1, fontWeight: FontWeight.w600),
+                ),
+                Expanded(
+                  child: Text('${widget.currentSong.duration}', textAlign: TextAlign.end,
+                    style: TextStyle(color: Colors.grey, fontFamily: kBalooBhainaFont, fontSize: 18, height: 1, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(padding:const EdgeInsets.only(top: 10.0),child: IconButton(icon: Icon(Icons.skip_previous,size: 50.0,color: Colors.brown), onPressed: (){prevSong();}),height: 80.0,),
+              Container(child: IconButton(icon: Icon(play,size: 70.0,color: Colors.brown,), onPressed: (){toggle();}),height: 80.0),
+              Container(padding:const EdgeInsets.only(top: 10.0,left: 10.0),child: IconButton(icon: Icon(Icons.skip_next,size: 50.0,color: Colors.brown,), onPressed: (){nextSong(true);}),height: 80.0),
+            ],
+          ),
+        ]
         ),
       ),
     );
