@@ -3,14 +3,14 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:music_player/screens/albumSongs.dart';
 import 'package:music_player/utils/constants.dart';
-import 'package:music_player/widgets/drawer.dart';
 import 'package:music_player/screens/home.dart';
-import 'package:music_player/utils/localizations.dart';
 import 'package:music_player/models/song.dart';
 import 'package:music_player/widgets/songs.dart';
 import 'package:music_player/utils/player.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 typedef void OnError(Exception exception);
 enum PlayerState { stopped, playing, paused }
@@ -66,8 +66,6 @@ class _PlayState extends State<Play> {
                   widget.currentSong=widget.songs[widget.index];
                   isAlbum?AlbumSongs.indexSelected=widget.index: Songs.indexSelected=widget.index;
                   player.currentSong=widget.currentSong;});
-
-   // player.playMusic(widget.currentSong);
   }
 
   void prevSong() {
@@ -115,9 +113,32 @@ class _PlayState extends State<Play> {
     });
   }
 
+  PaletteGenerator paletteGenerator;
+  ImageProvider imageProvider;
+  Color sliderActiveColor = kDefaultIControlsColor;
+
+  Future<void> _updatePaletteGenerator(ImageProvider imageProvider) async {
+    paletteGenerator = await PaletteGenerator.fromImageProvider(imageProvider);
+    setState(() {
+      sliderActiveColor = paletteGenerator?.dominantColor?.color;
+    });
+  }
+
+  @override
+  void initState() {
+
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    super.initState();
+    imageProvider = widget.currentSong.albumArt != null
+        ? FileImage(File(widget.currentSong.albumArt))
+        : AssetImage(kPlaceholderPath);
+    _updatePaletteGenerator(imageProvider);
+  }
+
   @override
   void dispose() {
     positionSubscription.cancel();
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     super.dispose();
   }//added
 
@@ -154,12 +175,17 @@ class _PlayState extends State<Play> {
                   Padding(
                     padding: const EdgeInsets.only(top:20.0, left: 20, right: 20),
                     child: Row(
+                      textBaseline: TextBaseline.alphabetic,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Icon(Icons.arrow_back, size: 30,),
+                        GestureDetector(
+                          child: Icon(Icons.arrow_back, size: 30,),
+                          onTap: () => Navigator.of(context).pop(),
+                        ),
                         Expanded(
                           child: Text('Now Playing',
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontFamily: kBalooBhainaFont, fontSize: 30, fontWeight: FontWeight.w700,),
+                            style: TextStyle( fontSize: 30, fontWeight: FontWeight.w700),
                           ),
                         )
                       ],
@@ -208,13 +234,9 @@ class _PlayState extends State<Play> {
           ),
           SizedBox(height: height*0.05,),
           Slider(
+            activeColor: sliderActiveColor,
             value: (position.inSeconds).toDouble() ?? 0.0,
-            onChanged: (double value){
-              setState((){
-                player.seek(value.roundToDouble());
-                position;
-                });
-              },
+            onChanged: (double value)=> setState(()=> player.seek(value.roundToDouble())),
             min:0.0,max: widget?.currentSong?.time?.floorToDouble(),
           ),
           Padding(
@@ -234,9 +256,18 @@ class _PlayState extends State<Play> {
           ),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Container(padding:const EdgeInsets.only(top: 10.0),child: IconButton(icon: Icon(Icons.skip_previous,size: 50.0,color: Colors.brown), onPressed: (){prevSong();}),height: 80.0,),
-              Container(child: IconButton(icon: Icon(play,size: 70.0,color: Colors.brown,), onPressed: (){toggle();}),height: 80.0),
-              Container(padding:const EdgeInsets.only(top: 10.0,left: 10.0),child: IconButton(icon: Icon(Icons.skip_next,size: 50.0,color: Colors.brown,), onPressed: (){nextSong(true);}),height: 80.0),
+              InkWell(
+                child: Icon(Icons.skip_previous,size: size.width*0.15,color: kDefaultIControlsColor),
+                onTap: ()=>prevSong()
+              ),
+              InkWell(
+                  child:Icon(playIcon,size:  size.width*0.22,color: kDefaultIControlsColor,),
+                  onTap: ()=>toggle()
+                  ),
+              InkWell(
+                  child: Icon(Icons.skip_next,size:  size.width*0.15,color: kDefaultIControlsColor,),
+                      onTap: ()=>nextSong(true)
+              ),
             ],
           ),
         ]
