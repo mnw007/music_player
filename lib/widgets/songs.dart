@@ -154,7 +154,7 @@ class _SongsState extends State<Songs> {
                                 Text(
                                   '${widget.songList[index].title}',
                                   style: TextStyle(
-                                      fontFamily: 'BalooBhaina',
+                                      fontFamily: kBalooBhainaFont,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                       color: Songs.indexSelected == index ||
@@ -169,7 +169,7 @@ class _SongsState extends State<Songs> {
                                 ),
                                 Text('${widget.songList[index].artist}',
                                     style: TextStyle(
-                                        fontFamily: 'BalooBhaina',
+                                        fontFamily: kBalooBhainaFont,
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500,
                                         color: Songs.indexSelected == index ||
@@ -190,7 +190,7 @@ class _SongsState extends State<Songs> {
                         ),
                          Text('${widget.songList[index].duration}',
                             style: TextStyle(
-                                fontFamily: 'BalooBhaina',
+                                fontFamily: kBalooBhainaFont,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
                                 color: Songs.indexSelected == index ||

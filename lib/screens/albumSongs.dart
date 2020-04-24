@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:music_player/utils/constants.dart';
@@ -55,21 +56,33 @@ class _AlbumSongsState extends State<AlbumSongs> {
   }
 
   void selectAll() {
-    widget.songs.album.forEach((song) {
-      song.isSelected = true;
-    });
-    setState(() {
-      widget.songs.album;
-    });
+    widget.songs.album.forEach((song) => song.isSelected = true);
+    setState(() => widget.songs.album);
   }
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       drawer: NavDrawer(),
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: !isSearch
-            ? Text(MyLocalizations.of(context).music)
+            ? Text(
+                '${widget.songs.name}',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 22.0,
+                  letterSpacing: 1.5,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.fade,
+                maxLines: 1,
+              )
             : Container(
                 child: TextField(
                     controller: controller,
@@ -107,142 +120,205 @@ class _AlbumSongsState extends State<AlbumSongs> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(
-                      bottom: 10.0,
-                      top: MediaQuery.of(context).size.height * 0.05),
-                  child: Column(
-                    children: <Widget>[
-                      CircleAvatar(
-                        backgroundImage: widget.songs.album.isNotEmpty
-                            ? (widget.songs.album[0].albumArt) == null
-                                ? AssetImage(kPlaceholderPath)
-                                : FileImage(
-                                    File(widget.songs.album[0].albumArt))
+                Padding(
+                  padding:
+                      EdgeInsets.only(bottom: height * .05, top: height * 0.04),
+                  child: Container(
+                    height: height * 0.3,
+                    width: width * .6,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0, 10),
+                          blurRadius: 20,
+                          color: Color(0xFF757575).withOpacity(.25),
+                        )
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image(
+                        image: widget.songs.album[0].albumArt != null
+                            ? FileImage(File(widget.songs.album[0].albumArt))
                             : AssetImage(kPlaceholderPath),
-                        radius: MediaQuery.of(context).size.height * 0.15,
+                        fit: BoxFit.fill,
+                        width: width * 0.6,
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.03,
-                            left: 10.0,
-                            right: 10.0),
-                        child: Text(
-                          '${widget.songs.name}',
-                          style: TextStyle(
-                              fontSize: 22.0,
-                              letterSpacing: 1.5,
-                              fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.fade,
-                          maxLines: 2,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.4,
+                  height: height * 0.5,
                   child: ListView.builder(
+                      padding: EdgeInsets.only(bottom: height * 0.15),
                       itemCount: widget.songs.album.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                          color: AlbumSongs.indexSelected == index ||
-                                  widget.songs.album[index].isSelected
-                              ? Colors.brown[400]
-                              : Theme.of(context).scaffoldBackgroundColor,
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage: widget
-                                          .songs.album[index].albumArt !=
-                                      null
-                                  ? FileImage(
-                                      File(widget.songs.album[index].albumArt))
-                                  : AssetImage(kPlaceholderPath),
+                        return GestureDetector(
+                          child: Container(
+                            color: AlbumSongs.indexSelected == index ||
+                                    widget.songs.album[index].isSelected
+                                ? Colors.brown[400]
+                                : Theme.of(context).scaffoldBackgroundColor,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10.0, top: 8, bottom: 8, right: 10),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          offset: Offset(0, 10),
+                                          blurRadius: 20,
+                                          color: Color(0xFF757575)
+                                              .withOpacity(.15),
+                                        )
+                                      ],
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Image(
+                                        image: widget.songs.album[index]
+                                                    .albumArt !=
+                                                null
+                                            ? FileImage(File(widget
+                                                .songs.album[index].albumArt))
+                                            : AssetImage(kPlaceholderPath),
+                                        fit: BoxFit.fill,
+                                        height: height * 0.095,
+                                        width: width * 0.18,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            '${widget.songs.album[index].title}',
+                                            style: TextStyle(
+                                                fontFamily: kBalooBhainaFont,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                color: AlbumSongs
+                                                                .indexSelected ==
+                                                            index ||
+                                                        widget
+                                                            .songs
+                                                            .album[index]
+                                                            .isSelected
+                                                    ? (Theme.of(context)
+                                                                .brightness ==
+                                                            Brightness.dark
+                                                        ? Colors.black
+                                                        : Colors.white)
+                                                    : (Theme.of(context)
+                                                                .brightness ==
+                                                            Brightness.dark
+                                                        ? Colors.white
+                                                        : Colors.black)),
+                                            maxLines: 1,
+                                          ),
+                                          Text(
+                                            '${widget.songs.album[index].artist}',
+                                            style: TextStyle(
+                                                fontFamily: kBalooBhainaFont,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w500,
+                                                color: AlbumSongs
+                                                                .indexSelected ==
+                                                            index ||
+                                                        widget
+                                                            .songs
+                                                            .album[index]
+                                                            .isSelected
+                                                    ? (Theme.of(context)
+                                                                .brightness ==
+                                                            Brightness.dark
+                                                        ? Colors.grey
+                                                        : Colors.white70)
+                                                    : (Theme.of(context)
+                                                                .brightness ==
+                                                            Brightness.dark
+                                                        ? Colors.white70
+                                                        : Colors.grey)),
+                                            maxLines: 1,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Text('${widget.songs.album[index].duration}',
+                                      style: TextStyle(
+                                          fontFamily: kBalooBhainaFont,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                          color: AlbumSongs.indexSelected ==
+                                                      index ||
+                                                  widget.songs.album[index]
+                                                      .isSelected
+                                              ? (Theme.of(context).brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.grey
+                                                  : Colors.white)
+                                              : (Theme.of(context).brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.white
+                                                  : Colors.grey))),
+                                ],
+                              ),
                             ),
-                            title: Text('${widget.songs.album[index].title}',
-                                overflow: TextOverflow.clip,
-                                maxLines: 2,
-                                style: TextStyle(
-                                    color: AlbumSongs.indexSelected == index ||
-                                            widget.songs.album[index].isSelected
-                                        ? (Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.black
-                                            : Colors.white)
-                                        : (Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white
-                                            : Colors.black))),
-                            subtitle: Text(
-                                '${widget.songs.album[index].artist}',
-                                style: TextStyle(
-                                    color: AlbumSongs.indexSelected == index ||
-                                            widget.songs.album[index].isSelected
-                                        ? (Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.black
-                                            : Colors.white70)
-                                        : (Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white70
-                                            : Colors.black))),
-                            trailing: Text(
-                                '${widget.songs.album[index].duration}',
-                                style: TextStyle(
-                                    color: AlbumSongs.indexSelected == index ||
-                                            widget.songs.album[index].isSelected
-                                        ? (Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.black
-                                            : Colors.white)
-                                        : (Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white
-                                            : Colors.black))),
-                            onTap: () {
-                              setState(() {
-                                if (!isSelected)
-                                  AlbumSongs.indexSelected = index;
-                                else {
-                                  widget.songs.album[index].isSelected =
-                                      !widget.songs.album[index].isSelected;
-                                  if (AlbumSongs.indexSelected == index)
-                                    AlbumSongs.indexSelected = null;
-                                  widget.songs.album[index].isSelected
-                                      ? addList.add(widget.songs.album[index])
-                                      : addList
-                                          .remove(widget.songs.album[index]);
-                                }
-                              });
-                              Songs.indexSelected = null;
-                              if (!isSelected) {
-                                playingList = widget.songs.album;
-                                isAlbum = true;
-                                mPlayer.playMusic(widget.songs.album[index]);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Play(
-                                            widget.songs.album,
-                                            widget.songs.album[index],
-                                            index)));
-                              }
-                              if (addList.isEmpty)
-                                setState(() {
-                                  isSelected = false;
-                                });
-                            },
-                            onLongPress: () {
-                              if (widget.isPlaylist)
-                                setState(() {
-                                  widget.songs.album[index].isSelected = true;
-                                  addList.add(widget.songs.album[index]);
-                                  AlbumSongs.indexSelected = index;
-                                  isSelected = true;
-                                });
-                            },
                           ),
+                          onTap: () {
+                            setState(() {
+                              if (!isSelected)
+                                AlbumSongs.indexSelected = index;
+                              else {
+                                widget.songs.album[index].isSelected =
+                                    !widget.songs.album[index].isSelected;
+                                if (AlbumSongs.indexSelected == index)
+                                  AlbumSongs.indexSelected = null;
+                                widget.songs.album[index].isSelected
+                                    ? addList.add(widget.songs.album[index])
+                                    : addList.remove(widget.songs.album[index]);
+                              }
+                            });
+                            Songs.indexSelected = null;
+                            if (!isSelected) {
+                              playingList = widget.songs.album;
+                              isAlbum = true;
+                              mPlayer.playMusic(widget.songs.album[index]);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Play(
+                                          widget.songs.album,
+                                          widget.songs.album[index],
+                                          index)));
+                            }
+                            if (addList.isEmpty)
+                              setState(() => isSelected = false);
+                          },
+                          onLongPress: () {
+                            if (widget.isPlaylist) {
+                              setState(() {
+                                widget.songs.album[index].isSelected = true;
+                                addList.add(widget.songs.album[index]);
+                                AlbumSongs.indexSelected = index;
+                                isSelected = true;
+                              });
+                            }
+                          },
                         );
                       }),
                 ),

@@ -147,7 +147,10 @@ class _PlayState extends State<Play> {
 
     Size size = MediaQuery.of(context).size;
     double height= size.height ;
-    positionSubscription = player.audioPlayer.onAudioPositionChanged.listen( (p) {if(mounted)setState(()=>position = p);});//added mounted check
+    positionSubscription = player.audioPlayer.onAudioPositionChanged.listen( (p) {
+              if(mounted)
+                setState(()=>position = p);
+            });//added mounted check
 
     return Scaffold(
       body: SingleChildScrollView(
