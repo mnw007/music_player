@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:music_player/screens/albumSongs.dart';
 import 'package:music_player/utils/constants.dart';
 import 'package:music_player/utils/localizations.dart';
+import 'package:music_player/widgets/album-grid-item.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:music_player/widgets/drawer.dart';
 import 'package:music_player/screens/home.dart';
 import 'package:music_player/models/song.dart';
 
@@ -24,8 +24,7 @@ void addSongs(List<Song> songList){
         return ListTile(
             title: Text('${playlist[index].name}'),
             onTap: (){
-             int result= checkDuplicate(songList, playlist[index]);
-             if(result==1)
+             if(isNameAvailable(songList, playlist[index]))
              {  playlist[index].addAlbum(songList);
                 editFile();
                 showMessage(scaffoldState.currentState, '${songList[0].title} ${songList.length-1>0? '+ ${songList.length-1}':''} ${MyLocalizations.of(scaffoldState.currentContext).added}');
@@ -85,18 +84,14 @@ void createPlaylist(ScaffoldState scaffold,{List<Song> songs}){
                   if(available)//adding song if name is valid
                   {
                     if(songs==null)//blank playlist
-                      {
                         playlist.add(Album(controller.text,kPlaceholderPath ));
-                        editFile();
-                        Navigator.pop(scaffold.context);
-                      }
                     else {
                       playlist.add(Album(controller.text, songs[0].albumArt));
                       playlist.last.addAlbum(songs);
-                      editFile();
                       showMessage(scaffold, '${songs[0].title} ${songs.length - 1 > 0 ? '+ ${songs.length - 1}' : ''} ${MyLocalizations.of(scaffold.context).added}');
-                      Navigator.pop(scaffold.context);
                     }
+                    editFile();
+                    Navigator.pop(scaffold.context);
                   }
                 }
             },),
@@ -124,21 +119,18 @@ void editFile()async {
   });
 }
 
-int checkDuplicate(List<Song> song,Album playlist){
-
+bool isNameAvailable(List<Song> song,Album playlist){
   for(int i=0;i<playlist.album.length;i++){
-    print(playlist.album[i].title);
     for(int j=0;j<song.length;j++)
     {
-      print(song[j].title);
       if (song[j].title == playlist.album[i].title) {
         showMessage(scaffoldState.currentState,
             '${song[j].title} ${MyLocalizations.of(scaffoldState.currentContext).already} ${playlist.name}');
-        return 0;
+        return false;
       }
     }
   }
-  return 1;
+  return true;
 }
 
 class Playlist extends StatefulWidget {
@@ -190,13 +182,23 @@ class _PlaylistState extends State<Playlist> {
 
   @override
   Widget build(BuildContext context) {
-    Size size=MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation;
+    final Size size=MediaQuery.of(context).size;
     return Scaffold(
       key: myScaff,
-        drawer: NavDrawer(shouldReplace: true,),
         appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           title: !isSearch
-              ? Text(MyLocalizations.of(context).playlist)
+              ? Text(MyLocalizations.of(context).playlist,   style: TextStyle(
+            color: Colors.black,
+            fontSize: 22.0,
+            letterSpacing: 1.5,
+            fontWeight: FontWeight.w500,
+          ),
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.fade,
+            maxLines: 1,)
               : Container(
                   child: TextField(
                       controller: controller,autofocus:true,
@@ -232,44 +234,49 @@ class _PlaylistState extends State<Playlist> {
               ],
             ),
           ):
-              Container(
-                padding: EdgeInsets.only(top: size.height*0.03,left: size.width*0.02 ),
-                child: ListView.builder(
-                    itemCount: playlist.length,
-                    itemBuilder: (context,index){
-                      return Container(
-                        padding: EdgeInsets.symmetric(vertical: size.height*0.015),
-                        color: selectedIndex==index?Colors.brown[400]: Theme.of(context).scaffoldBackgroundColor,
-                        child: ListTile(
-                          leading: CircleAvatar(backgroundImage: playlist[index].album.isNotEmpty
-                              ? (playlist[index].album[0].albumArt)== null?AssetImage(kPlaceholderPath): FileImage(File(playlist[index].album[0].albumArt))
-                              : AssetImage(kPlaceholderPath),radius: 50.0,),
-                          title: Container(padding:EdgeInsets.only(left: size.width*0.015),child: Text('${playlist[index].name}',style: TextStyle(fontSize: 23.0,fontWeight: FontWeight.w400,color:selectedIndex==index ? (Theme.of(context).brightness==Brightness.dark? Colors.black:Colors.white) : (Theme.of(context).brightness==Brightness.dark? Colors.white:Colors.black)),)),
-                          contentPadding: const EdgeInsets.only(top: 15.0,left: 8.0,bottom: 15.0),
-                          onTap:(){
-                            if(isLongPressed)
-                              {
-                                setState(() {
-                                  isLongPressed=false;
-                                  selectedIndex=null;
-                                });
-                              }
-                            else
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AlbumSongs(playlist[index],isPlaylist: true,)));
-                            },
-                          onLongPress: (){
-                            isLongPressed=true;
-                            selectedIndex=index;
-                            setState(() {
-                              isLongPressed;
-                              selectedIndex;
-                            });
-                          },
-                        ),
-                      );
-                    }),
-              )
-          ,
-        ));
+          GridView.builder(
+            padding: EdgeInsets.only(bottom: size.height * 0.15),
+            itemCount: playlist.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: size.aspectRatio * 1.65,
+                crossAxisCount:
+                (orientation == Orientation.portrait) ? 2 : 3),
+            itemBuilder: (BuildContext context, int index) {
+              return InkWell(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: GridTile(
+                    child: AlbumItem(
+                      image: playlist[index].album.isNotEmpty?playlist[index].album[0].albumArt:null,
+                      name: playlist[index].name,
+                    ),
+                  ),
+                ),
+                onTap:(){
+                  if(isLongPressed)
+                  {
+                    setState(() {
+                      isLongPressed=false;
+                      selectedIndex=null;
+                    });
+                  }
+                  else
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>AlbumSongs(playlist[index],isPlaylist: true,)));
+                },
+                onLongPress: (){
+                  setState(() {
+                    isLongPressed=true;
+                    selectedIndex=index;
+                  });
+                },
+              );
+            },
+          ),
+        ),
+      floatingActionButton: FloatingActionButton(onPressed:() =>createPlaylist(myScaff.currentState),
+        child: Icon(Icons.add, size: 35,),
+        tooltip: 'Add Playlist',
+      ),
+    );
   }
 }

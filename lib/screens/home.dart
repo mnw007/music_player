@@ -12,6 +12,7 @@ import 'package:music_player/screens/play.dart';
 import 'package:music_player/screens/playlist.dart';
 import 'package:music_player/screens/search.dart';
 import 'package:music_player/models/song.dart';
+import 'package:music_player/widgets/settings.dart';
 import 'package:music_player/widgets/song-bar.dart';
 import 'package:music_player/widgets/songs.dart';
 import 'package:path_provider/path_provider.dart';
@@ -152,7 +153,7 @@ class _TabViewState extends State<TabView> {
         key: scaffoldState,
         drawer: NavDrawer(),
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
           centerTitle: true,
           title: !isSearch
@@ -160,7 +161,7 @@ class _TabViewState extends State<TabView> {
                 style: TextStyle(color: Colors.black,
                       fontFamily: kBalooBhainaFont,
                       fontSize: 28,
-                      fontWeight: FontWeight.bold
+                      fontWeight: FontWeight.bold,
                     ),
                 )
               : Container(
@@ -196,7 +197,7 @@ class _TabViewState extends State<TabView> {
           ],
           bottom: TabBar(
             unselectedLabelColor: Colors.grey,
-            labelColor: Colors.pinkAccent,
+            labelColor: Theme.of(context).accentColor,
             labelStyle: TextStyle(fontSize: 25, fontFamily: kBalooBhainaFont),
             indicatorColor: Colors.white,
             tabs: <Widget>[

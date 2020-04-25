@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -6,6 +5,7 @@ import 'package:music_player/screens/albumSongs.dart';
 import 'package:music_player/screens/home.dart';
 import 'package:music_player/models/song.dart';
 import 'package:music_player/utils/constants.dart';
+import 'package:music_player/widgets/album-grid-item.dart';
 
 import '../models/album.dart';
 
@@ -55,42 +55,36 @@ class _AlbumsState extends State<Albums> {
     final size = MediaQuery.of(context).size;
 
     if (widget.songList == null) {
-      setState(() {
-        widget.songList = TabView.songList;
-      });
+      setState(() => widget.songList = TabView.songList);
       if (widget.songList != null) createAlbums();
     }
     if (isChanged) createAlbums();
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: widget.songList == null
-          ? Image(
-              image: AssetImage(kPlaceholderPath),
-            )
+          ? Image(image: AssetImage(kPlaceholderPath),)
           : GridView.builder(
-              itemCount: widget.albums.length,
+        padding: EdgeInsets.only(bottom: size.height * 0.15),
+        itemCount: widget.albums.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: size.aspectRatio * 1.65,
                   crossAxisCount:
                       (orientation == Orientation.portrait) ? 2 : 3),
               itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
+                return InkWell(
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: GridTile(
-                      child: AlbumImage(
+                      child: AlbumItem(
                         image: widget.albums[index].albumArt,
                         name: widget.albums[index].name,
                       ),
                     ),
                   ),
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () => Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                AlbumSongs(widget.albums[index])));
-                  },
+                        MaterialPageRoute(builder: (context) => AlbumSongs(widget.albums[index]))
+                    ),
                 );
               },
             ),
@@ -98,67 +92,3 @@ class _AlbumsState extends State<Albums> {
   }
 }
 
-class AlbumImage extends StatelessWidget {
-  final String image;
-  final String name;
-
-  AlbumImage({Key key, this.image, this.name}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: Stack(children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    offset: Offset(0, 10),
-                    blurRadius: 20,
-                    color: Color(0xFF757575).withOpacity(.10),
-                  )
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image(
-                  image: image != null
-                      ? FileImage(File(image))
-                      : AssetImage(kPlaceholderPath),
-                  fit: BoxFit.fill,
-                  width: double.infinity,
-                  height: double.infinity,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: Icon(
-                  Icons.play_circle_outline,
-                  size: 35,
-                ),
-              ),
-            )
-          ]),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text(
-          '${name}',
-          style: TextStyle(
-              fontSize: 19.0,
-              fontWeight: FontWeight.w800,
-              fontFamily: 'BalooBhaina'),
-          textAlign: TextAlign.center,
-          maxLines: 1,
-        ),
-      ],
-    );
-  }
-}

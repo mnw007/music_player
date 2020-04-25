@@ -14,12 +14,11 @@ class MusicApp extends StatelessWidget{
     return DynamicTheme(
         defaultBrightness: Brightness.light,
         data: (brightness) => new ThemeData(
-          primarySwatch: Colors.brown,
+          primarySwatch: Colors.blue,
           brightness: brightness,
           primaryIconTheme: const IconThemeData.fallback().copyWith(
             color: Colors.black,
           ),
-          scaffoldBackgroundColor: Colors.white
     ),
     themedWidgetBuilder: (context, theme) {
       return MaterialApp(onGenerateTitle: (BuildContext context) =>

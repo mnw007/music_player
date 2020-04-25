@@ -23,7 +23,6 @@ class SearchResult extends StatelessWidget {
     Size size=MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(title: Text('${MyLocalizations.of(context).results} "$title"')),
-      drawer: NavDrawer(),
       body: Container(
         child: message!=null ? Container(
           padding: EdgeInsets.symmetric(horizontal: size.width*0.15),

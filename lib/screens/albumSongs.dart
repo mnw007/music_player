@@ -10,6 +10,7 @@ import 'package:music_player/screens/play.dart';
 import 'package:music_player/utils/player.dart';
 import 'package:music_player/screens/playlist.dart';
 import 'package:music_player/models/song.dart';
+import 'package:music_player/widgets/settings.dart';
 import 'package:music_player/widgets/song-bar.dart';
 import 'package:music_player/widgets/songs.dart';
 
@@ -66,8 +67,8 @@ class _AlbumSongsState extends State<AlbumSongs> {
     double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      drawer: NavDrawer(),
       appBar: AppBar(
+        leading: SettingsButton(),
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: !isSearch

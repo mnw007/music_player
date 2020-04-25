@@ -69,7 +69,8 @@ class _SongsState extends State<Songs> {
               image: AssetImage(kPlaceholderPath),
             )
           : ListView.builder(
-              itemCount: widget.songList.length,
+          padding: EdgeInsets.only(bottom: size.height * 0.15),
+          itemCount: widget.songList.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {

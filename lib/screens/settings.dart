@@ -24,7 +24,6 @@ class SettingsState extends State<Settings> {
     Size size= MediaQuery.of(context).size;
 
     return Scaffold(
-      drawer: NavDrawer(shouldReplace: true,),
       appBar: AppBar(title: Text(MyLocalizations.of(context).settings),
       ),
       body: Container(
